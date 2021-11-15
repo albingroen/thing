@@ -2,9 +2,11 @@
   "expo": {
     "name": "office-thing",
     "slug": "office-thing",
+    "scheme": "office.thing",
     "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -13,9 +15,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
