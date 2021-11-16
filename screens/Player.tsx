@@ -95,7 +95,7 @@ export default function Player() {
               aspectRatio: 4 / 4,
             }}
             source={{
-              uri: data ? data?.item.album.images[1].url : undefined,
+              uri: data?.item?.album?.images?.[1]?.url ?? undefined,
             }}
           />
         </View>
@@ -105,7 +105,7 @@ export default function Player() {
             numberOfLines={1}
             style={tw("text-2xl max-w-md font-semibold text-white opacity-75")}
           >
-            {data ? data?.item.album.name : "Nothing playing"}
+            {data?.item?.album?.name ?? "Nothing playing"}
           </Text>
           <Text
             numberOfLines={2}
@@ -122,7 +122,7 @@ export default function Player() {
             style={tw("text-3xl max-w-md font-medium text-white mt-1")}
           >
             {data?.item
-              ? data?.item.artists.map((artist) => artist.name).join(", ")
+              ? data.item.artists.map((artist) => artist.name).join(", ")
               : "Nothing playing"}
           </Text>
         </View>
@@ -187,7 +187,7 @@ export default function Player() {
         >
           <FastForwardIcon size={50} style={tw("text-white")} />
         </TouchableOpacity>
-        <TouchableOpacity style={tw("p-6 pt-5 pb-7")}>
+        <TouchableOpacity disabled style={tw("p-6 pt-5 pb-7")}>
           <HeartIcon size={50} style={tw("text-white")} />
         </TouchableOpacity>
       </View>

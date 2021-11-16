@@ -1,29 +1,9 @@
 import React from "react";
-import appConfig from "../config.json";
-import axios from "axios";
 import tw from "tailwind-rn";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useAuth } from "../lib/auth";
 import { useNavigation } from "@react-navigation/native";
-
-const playTrack = async (uri: string, context_uri: string, token: string) => {
-  return axios
-    .put(
-      `${appConfig.SPOTIFY_API_URL}/me/player/play`,
-      {
-        context_uri,
-        offset: {
-          uri,
-        },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
-    .then((res) => res.data);
-};
+import { play } from "../lib/api";
 
 type TracksProps = {
   context_uri: string;
@@ -47,7 +27,7 @@ export default function Tracks({ context_uri, tracks }: TracksProps) {
           key={track.id}
           onPress={async () => {
             if (auth) {
-              await playTrack(track.uri, context_uri, auth.access_token);
+              await play(context_uri, auth.access_token, track.uri);
               navigation.navigate("Player");
             }
           }}

@@ -19,7 +19,9 @@ const Stack = createNativeStackNavigator<{
   Search: { search?: string };
 }>();
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
 
 export default function App() {
   return (

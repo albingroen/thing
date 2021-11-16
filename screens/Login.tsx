@@ -49,7 +49,7 @@ export default function Login() {
   React.useEffect(() => {
     if (response?.type === "success") {
       axios
-        .get(`http://localhost:1337/callback?code=${response.params.code}`)
+        .get(`http://192.168.10.109:1337/callback?code=${response.params.code}`)
         .then(async (res) => {
           const auth = res.data;
           try {
