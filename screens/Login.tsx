@@ -76,7 +76,7 @@ export default function Login() {
   }, [response]);
 
   return (
-    <View style={tw("bg-black flex-1 p-8")}>
+    <View style={tw("bg-black flex-1 p-8 items-center justify-center")}>
       <TouchableOpacity
         disabled={!request}
         onPress={async () => {
@@ -87,7 +87,9 @@ export default function Login() {
           }
         }}
       >
-        <Text style={tw("text-white text-lg")}>Log in</Text>
+        <Text style={tw("text-white text-3xl text-green-500")}>
+          Log in using Spotify
+        </Text>
       </TouchableOpacity>
     </View>
   );

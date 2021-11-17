@@ -39,7 +39,7 @@ export default function Playlists({ playlists }) {
                 style={tw("text-white mt-4 text-2xl font-medium tracking-wide")}
                 numberOfLines={1}
               >
-                {playlist.name}
+                {playlist.name || "No name"}
               </Text>
               <Text
                 style={tw("text-gray-500 font-medium text-xl mt-0")}

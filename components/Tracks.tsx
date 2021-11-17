@@ -23,14 +23,14 @@ export default function Tracks({ onPlayTrack, tracks }: TracksProps) {
         return (
           <TouchableOpacity
             style={tw("flex-row items-center w-full mb-12 mb-6")}
-            key={track.id}
+            key={track.uri}
             onPress={async () => {
               onPlayTrack(track.uri);
             }}
           >
             <Image
               style={tw("h-20 w-20 mr-6 rounded bg-gray-800")}
-              source={{ uri: track.album.images[1].url }}
+              source={{ uri: track.album?.images?.[1]?.url }}
             />
             <View>
               <Text
@@ -39,10 +39,10 @@ export default function Tracks({ onPlayTrack, tracks }: TracksProps) {
                 )}
                 numberOfLines={1}
               >
-                {track.name}
+                {track.name || "No name"}
               </Text>
               <Text style={tw("text-gray-500 font-medium text-2xl mt-0.5 ")}>
-                {track.artists.map((artist) => artist.name).join(", ")}
+                {track.artists?.map((artist) => artist.name).join(", ")}
               </Text>
             </View>
           </TouchableOpacity>
