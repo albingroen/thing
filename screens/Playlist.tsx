@@ -4,12 +4,22 @@ import Tracks from "../components/Tracks";
 import appConfig from "../config.json";
 import axios from "axios";
 import tw from "tailwind-rn";
-import { View, Text, TouchableOpacity } from "react-native";
-import { useAuth } from "../lib/auth";
-import { useQuery } from "react-query";
 import { PlayIcon } from "react-native-heroicons/solid";
-import { play } from "../lib/api";
+import { View, Text, TouchableOpacity } from "react-native";
+import { play, playTopTracks } from "../lib/api";
+import { useAuth } from "../lib/auth";
 import { useNavigation } from "@react-navigation/native";
+import { useQuery } from "react-query";
+
+const getLikedTracks = async (token: string) => {
+  return axios
+    .get(`${appConfig.SPOTIFY_API_URL}/me/tracks?limit=50`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data);
+};
 
 const getPlaylist = async (id: string, token: string) => {
   return axios
@@ -23,17 +33,27 @@ const getPlaylist = async (id: string, token: string) => {
 
 export default function Playlist({ route }) {
   const { id, name } = route.params;
+  const isTopTracks = id === "top-tracks";
 
   const navigation = useNavigation();
   const [auth] = useAuth();
 
-  const { data } = useQuery(
+  const { data: tracksData } = useQuery(
     ["playlists", id],
     () => getPlaylist(id, auth?.access_token),
     {
-      enabled: id && Boolean(auth?.access_token),
+      enabled: id && !isTopTracks && Boolean(auth?.access_token),
     }
   );
+
+  const { data: topTracksData } = useQuery(
+    "top-tracks",
+    () => getLikedTracks(auth?.access_token),
+    { enabled: isTopTracks && Boolean(auth?.access_token) }
+  );
+
+  const data = isTopTracks ? topTracksData : tracksData;
+  const tracks = data?.items ?? data?.tracks.items;
 
   return (
     <View style={tw("flex-1 bg-black py-6")}>
@@ -41,7 +61,7 @@ export default function Playlist({ route }) {
         <View>
           <Text style={tw("text-4xl font-semibold text-white")}>{name}</Text>
           <Text style={tw("text-gray-400 text-xl font-semibold mt-1")}>
-            {data?.tracks.items.length ?? 0} songs
+            {tracks?.length ?? 0} songs
           </Text>
         </View>
 
@@ -49,7 +69,14 @@ export default function Playlist({ route }) {
           <TouchableOpacity
             onPress={async () => {
               if (auth) {
-                await play(data.uri, auth.access_token);
+                if (isTopTracks && tracks?.length) {
+                  await playTopTracks(
+                    tracks.map((track) => track.track.uri),
+                    auth.access_token
+                  );
+                } else {
+                  await play(data.uri, auth.access_token);
+                }
                 navigation.navigate("Player");
               }
             }}
@@ -60,7 +87,26 @@ export default function Playlist({ route }) {
           <CloseButton padded />
         </View>
       </View>
-      {data && <Tracks context_uri={data.uri} tracks={data.tracks.items} />}
+      {data && (
+        <Tracks
+          onPlayTrack={async (trackUri) => {
+            if (auth) {
+              if (isTopTracks && tracks?.length) {
+                await playTopTracks(
+                  tracks.map((track) => track.track.uri),
+                  auth.access_token,
+                  trackUri
+                );
+              } else {
+                await play(data.uri, auth.access_token, trackUri);
+              }
+
+              navigation.navigate("Player");
+            }
+          }}
+          tracks={tracks}
+        />
+      )}
     </View>
   );
 }

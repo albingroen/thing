@@ -32,5 +32,27 @@ export default function Home() {
     }
   );
 
-  return <Layout>{data ? <Playlists playlists={data.items} /> : null}</Layout>;
+  return (
+    <Layout>
+      {data ? (
+        <Playlists
+          playlists={[
+            {
+              id: "top-tracks",
+              images: [
+                {
+                  url: "https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png",
+                },
+              ],
+              name: "Liked Songs",
+              owner: {
+                display_name: "You",
+              },
+            },
+            ...data.items,
+          ]}
+        />
+      ) : null}
+    </Layout>
+  );
 }

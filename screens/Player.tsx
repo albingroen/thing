@@ -91,7 +91,7 @@ export default function Player() {
         >
           <Image
             style={{
-              ...tw("h-full rounded-md bg-gray-700"),
+              ...tw("h-full rounded-md bg-gray-800"),
               aspectRatio: 4 / 4,
             }}
             source={{

@@ -15,6 +15,7 @@ const Stack = createNativeStackNavigator<{
   Login: undefined;
   Library: undefined;
   SearchInput: undefined;
+  Playlist: { id: string; name: string };
   Player: { trackId: string };
   Search: { search?: string };
 }>();

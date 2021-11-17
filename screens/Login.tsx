@@ -27,12 +27,20 @@ export default function Login() {
       clientId: clientId,
       scopes: [
         "user-read-email",
-        "playlist-modify-public",
         "app-remote-control",
         "streaming",
         "user-read-playback-state",
         "user-modify-playback-state",
         "user-read-currently-playing",
+        "playlist-read-private",
+        "playlist-modify-private",
+        "playlist-modify-public",
+        "playlist-read-collaborative",
+        "user-library-modify",
+        "user-library-read",
+        "user-top-read",
+        "user-read-recently-played",
+        "user-read-playback-position",
       ],
       usePKCE: false,
       redirectUri,
@@ -49,7 +57,9 @@ export default function Login() {
   React.useEffect(() => {
     if (response?.type === "success") {
       axios
-        .get(`http://192.168.10.109:1337/callback?code=${response.params.code}`)
+        .get(
+          `https://office-thing-api.onrender.com/callback?code=${response.params.code}`
+        )
         .then(async (res) => {
           const auth = res.data;
           try {
