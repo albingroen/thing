@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "office-thing",
-    "slug": "office-thing",
-    "scheme": "office.thing",
+    "name": "thing",
+    "slug": "thing",
+    "scheme": "thing",
     "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/icon.png",
