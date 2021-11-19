@@ -1,23 +1,9 @@
 import React from "react";
 import Layout from "../components/Layout";
 import Playlists from "../components/Playlists";
-import appConfig from "../config.json";
-import axios from "axios";
 import { useAuth } from "../lib/auth";
 import { useQuery } from "react-query";
-
-const search = async (query: string, token: string) => {
-  return axios
-    .get(
-      `${appConfig.SPOTIFY_API_URL}/search?q=${query}&type=playlist&limit=10`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
-    .then((res) => res.data);
-};
+import { search } from "../lib/api";
 
 export default function Search({ route }) {
   const [auth] = useAuth();

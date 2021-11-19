@@ -1,6 +1,4 @@
 import React from "react";
-import appConfig from "../config.json";
-import axios from "axios";
 import tw from "tailwind-rn";
 import {
   FastForwardIcon,
@@ -10,59 +8,10 @@ import {
 } from "react-native-heroicons/solid";
 import { HeartIcon, XIcon } from "react-native-heroicons/outline";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import { getPlayer, next, pause, previous, resume } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "react-query";
-
-const getPlayer = async (token: string) => {
-  return axios
-    .get(`${appConfig.SPOTIFY_API_URL}/me/player`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => res.data);
-};
-
-const pause = async (token: string) => {
-  return axios
-    .put(`${appConfig.SPOTIFY_API_URL}/me/player/pause`, undefined, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => res.data);
-};
-
-const resume = async (token: string) => {
-  return axios
-    .put(`${appConfig.SPOTIFY_API_URL}/me/player/play`, undefined, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => res.data);
-};
-
-const next = async (token: string) => {
-  return axios
-    .post(`${appConfig.SPOTIFY_API_URL}/me/player/next`, undefined, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => res.data);
-};
-
-const previous = async (token: string) => {
-  return axios
-    .post(`${appConfig.SPOTIFY_API_URL}/me/player/previous`, undefined, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => res.data);
-};
 
 export default function Player() {
   const navigation = useNavigation();

@@ -1,8 +1,8 @@
 import React from "react";
+import CloseButton from "../components/CloseButton";
 import tw from "tailwind-rn";
 import { TextInput, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import CloseButton from "../components/CloseButton";
 
 export default function SearchInput() {
   const navigation = useNavigation();

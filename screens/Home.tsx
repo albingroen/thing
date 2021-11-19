@@ -1,20 +1,9 @@
 import React from "react";
 import Layout from "../components/Layout";
 import Playlists from "../components/Playlists";
-import appConfig from "../config.json";
-import axios from "axios";
+import { getMyPlaylists } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { useQuery } from "react-query";
-
-const getMyPlaylists = async (token: string) => {
-  return axios
-    .get(`${appConfig.SPOTIFY_API_URL}/me/playlists`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => res.data);
-};
 
 export default function Home() {
   const [auth, { logout }] = useAuth();

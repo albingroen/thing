@@ -1,72 +1,25 @@
 import React from "react";
 import CloseButton from "../components/CloseButton";
 import Tracks from "../components/Tracks";
-import appConfig from "../config.json";
-import axios from "axios";
 import tw from "tailwind-rn";
+import { HeartIcon as HeartIconOutlined } from "react-native-heroicons/outline";
 import {
   PlayIcon,
   HeartIcon as HeartIconSolid,
 } from "react-native-heroicons/solid";
-import { HeartIcon as HeartIconOutlined } from "react-native-heroicons/outline";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
-import { play, playTopTracks } from "../lib/api";
+import {
+  followPlaylist,
+  getIsUserFollowingPlaylist,
+  getLikedTracks,
+  getPlaylist,
+  play,
+  playTopTracks,
+  unfollowPlaylist,
+} from "../lib/api";
 import { useAuth } from "../lib/auth";
-import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-
-const getLikedTracks = async (token: string) => {
-  return axios
-    .get(`${appConfig.SPOTIFY_API_URL}/me/tracks?limit=50`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => res.data);
-};
-
-const getPlaylist = async (id: string, token: string) => {
-  return axios
-    .get(`${appConfig.SPOTIFY_API_URL}/playlists/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => res.data);
-};
-
-const getIsUserFollowingPlaylist = async (id: string, token: string) => {
-  return axios
-    .get(
-      `${appConfig.SPOTIFY_API_URL}/playlists/${id}/followers/contains?ids=abbecooling123`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
-    .then((res) => res.data);
-};
-
-const followPlaylist = async (id: string, token: string) => {
-  return axios
-    .put(`${appConfig.SPOTIFY_API_URL}/playlists/${id}/followers`, undefined, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => res.data);
-};
-
-const unfollowPlaylist = async (id: string, token: string) => {
-  return axios
-    .delete(`${appConfig.SPOTIFY_API_URL}/playlists/${id}/followers`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => res.data);
-};
+import { useNavigation } from "@react-navigation/native";
 
 export default function Playlist({ route }) {
   const { id, name } = route.params;
@@ -102,7 +55,7 @@ export default function Playlist({ route }) {
   const followPlaylistMutation = useMutation(
     (id: string) => followPlaylist(id, auth?.access_token),
     {
-      onMutate: async (value) => {
+      onMutate: async () => {
         const previousValue = queryClient.getQueryData(isFollowingQueryKey);
         queryClient.setQueryData(isFollowingQueryKey, () => [true]);
         return { previousValue };
@@ -119,7 +72,7 @@ export default function Playlist({ route }) {
   const unfollowPlaylistMutation = useMutation(
     (id: string) => unfollowPlaylist(id, auth?.access_token),
     {
-      onMutate: async (value) => {
+      onMutate: async () => {
         const previousValue = queryClient.getQueryData(isFollowingQueryKey);
         queryClient.setQueryData(isFollowingQueryKey, () => [false]);
         return { previousValue };
